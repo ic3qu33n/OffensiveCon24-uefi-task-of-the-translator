@@ -24,18 +24,18 @@ UefiMain:
 	//function prologue
 	stp	x29, x30, [sp, #0x30]
 	mov	x29, sp
-	str	x0, [sp, #-0x18] //store imageHandle var on stack
-	str	x1, [sp, #-0x20] //store efiSystemTable var on stack
-	ldr x0, [sp, #-0x20] //load efiSystemTable into x0
+	str	x0, [sp, #0x18] //store imageHandle var on stack
+	str	x1, [sp, #0x20] //store efiSystemTable var on stack
+	ldr x0, [sp, #0x20] //load efiSystemTable into x0
 	ldr x0, [x0, #0x60] // load x0 =SystemTable + 0x60 == gBS
-	str x0, [sp, #-0x8]	//store gBS var on stack
-	ldr x0, [sp, #-0x8] //load x0 = gBS
+	str x0, [sp, #0x8]	//store gBS var on stack
+	ldr x0, [sp, #0x8] //load x0 = gBS
 	ldr x0, [x0, #0x140] // gBS->LocateProtocol
-	str x0, [sp, #-0x10] //store locateProtocol var on stack
-	ldr x1, [sp, #-0x20] //load x0 = SystemTable (from stack at sp - #0x20)
+	str x0, [sp, #0x10] //store locateProtocol var on stack
+	ldr x1, [sp, #0x20] //load x0 = SystemTable (from stack at sp - #0x20)
 	ldr x0, [x1, #0x40] //load x0 = ConOut (SystemTable + 0x40)
 	ldr x3, [x0, #0x8] //load x3 =  OutputString = SystemTable->ConOut->OutputString== x0 + 0x8 == ConOut + 0x8 == OutputString
-	ldr x0, [sp, #-0x20] //load x0 = SystemTable (from stack at sp - #0x20)
+	ldr x0, [sp, #0x20] //load x0 = SystemTable (from stack at sp - #0x20)
 	ldr x2, [x0, #0x40] //load x2 = ConOut == x0 + 0x40 = SystemTable + 0x40
 	adrp x0, hellostr
 	add x1, x0, hellostr
