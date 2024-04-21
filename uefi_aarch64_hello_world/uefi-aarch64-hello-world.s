@@ -37,8 +37,9 @@ UefiMain:
 	ldr x3, [x0, #0x8] //load x3 =  OutputString = SystemTable->ConOut->OutputString== x0 + 0x8 == ConOut + 0x8 == OutputString
 	ldr x0, [sp, #0x20] //load x0 = SystemTable (from stack at sp - #0x20)
 	ldr x2, [x0, #0x40] //load x2 = ConOut == x0 + 0x40 = SystemTable + 0x40
-	adrp x0, hellostr
-	add x1, x0, hellostr
+	adrp x1, hellostr
+	add x1, x1, #0x10 //a hacky workaround bc the offset to the string is 0x10 from the start of the hellostr address in the .data section
+	//add x1, x1, =hellostr
 	//ldr x1, =hellostr
 	mov x0, x2 //mov x0 = SystemTable->ConOut == x2
 	blr x3	//call SystemTable->ConOut->OutputString(SystemTable->ConOut, L"hello from the other side\n");
