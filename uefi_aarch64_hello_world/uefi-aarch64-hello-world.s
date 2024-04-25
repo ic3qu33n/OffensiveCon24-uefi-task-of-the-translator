@@ -37,17 +37,17 @@ UefiMain:
 	ldr x3, [x0, #0x8] //load x3 =  OutputString = SystemTable->ConOut->OutputString== x0 + 0x8 == ConOut + 0x8 == OutputString
 	ldr x0, [sp, #0x20] //load x0 = SystemTable (from stack at sp - #0x20)
 	ldr x2, [x0, #0x40] //load x2 = ConOut == x0 + 0x40 = SystemTable + 0x40
-	//adrp x1, hellostr
-	//add x1, x1, #0x10 //a hacky workaround bc the offset to the string is 0x10 from the start of the hellostr address in the .data section
-	//add x1, x1, hellochars
-	//add x1, x1, =hellostr
-	//ldr x1, =hellostr
-	mov x1, #0x0048
-	movk x1, #0x0065, lsl #16
-	movk x1, #0x006c, lsl #32
-	movk x1, #0x006c, lsl #48
-	str x1, [sp, #0x58]
-	add x1, sp, #0x58
+	adrp x1, hellostr
+	add x1, x1, #0x8 //a hacky workaround bc the offset to the string is 0x10 from the start of the hellostr address in the .data section
+	
+	//Alternate implementation that uses hex vals and the stack to print Unicode16 string	
+	//mov x1, #0x0048
+	//movk x1, #0x0065, lsl #16
+	//movk x1, #0x006c, lsl #32
+	//movk x1, #0x006c, lsl #48
+	//str x1, [sp, #0x58]
+	//add x1, sp, #0x58
+	
 	mov x0, x2 //mov x0 = SystemTable->ConOut == x2
 	blr x3	//call SystemTable->ConOut->OutputString(SystemTable->ConOut, L"hello from the other side\n");
 	//function epilogue
@@ -58,6 +58,6 @@ UefiMain:
 .data
 .balign 8
 hellostr:
-	.asciz "Hello from the other side"
+	.string16 "Hello from the other side"
 	//.word 0x00480065
 	//.word 0x48, 0x00, 0x65, 0x00, 0x6C, 0x00, 0x6C, 0x00, 0x6F, 0x00, 0x20, 0x00, 0x66, 0x00, 0x72, 0x00, 0x6F, 0x00, 0x6D, 0x00, 0x20, 0x00, 0x74, 0x00, 0x68, 0x00, 0x65, 0x00, 0x20, 0x00, 0x6F, 0x00, 0x74, 0x00, 0x68, 0x00, 0x65, 0x00, 0x72, 0x00, 0x20, 0x00, 0x73, 0x00, 0x69, 0x00, 0x64, 0x00, 0x65, 0x00
