@@ -103,91 +103,100 @@ _start:
 
 UefiMain:
 	//function prologue
-	stp	x29, x30, [sp, #-0xa0]
+	stp	x29, x30, [sp, #-0xa0]!
+	//sub sp, sp, #0xa0
 	mov	x29, sp
-	str	x0, [sp, #-0x88] //store imageHandle var on stack
-	str	x1, [sp, #-0x90] //store efiSystemTable var on stack
-	ldr x0, [sp, #-0x90] //load efiSystemTable into x0
+	str	x0, [sp, #0x88] //store imageHandle var on stack
+	str	x1, [sp, #0x90] //store efiSystemTable var on stack
+	ldr x0, [sp, #0x90] //load efiSystemTable into x0
 	ldr x0, [x0, #0x60] // load x0 =SystemTable + 0x60 == gBS
-	str x0, [sp, #-0x10]	//store gBS var on stack
+	str x0, [sp, #0x10]	//store gBS var on stack
 	//load Loaded Image Protocol guid
 	mov x0, #0x31a1
 	movk x0, #0x5b1b, LSL #16
-	str x0, [sp,#-0x40]  //Store final part of LIP GUID at sp-0x40	
-	mov x0, #0x9562
-	strh x0, [sp, #-0x3c] //Store 2nd part of LIP GUID at sp-0x3c	
-	mov x0, #0x11d2
-	strh x0, [sp, #-0x3a] //Store 3rd part of LIP GUID at sp-0x3a	
+	str x0, [sp,#0x40]  //Store final part of LIP GUID at sp-0x40	
+	mov w0, #0x9562
+	strh w0, [sp, #0x3c] //Store 2nd part of LIP GUID at sp-0x3c	
+	mov w0, #0x11d2
+	strh w0, [sp, #0x3a] //Store 3rd part of LIP GUID at sp-0x3a	
 	mov x0, #0x3f8e
 	movk x0, #0xa000, LSL #16
 	movk x0, #0x69c9, LSL #32
 	movk x0, #0x3b72, LSL #48
-	str x0, [sp, #-0x38] //Store final part of LIP GUID at sp-0x38	
-	ldr x0, [sp, #-0x10] //load x0 = gBS
+	str x0, [sp, #0x38] //Store final part of LIP GUID at sp-0x38	
+	ldr x0, [sp, #0x10] //load x0 = gBS
 	ldr x6, [x0, #0x118] // load gBS+0x118 (OpenProtocol) into x6
-	add x0, sp, #0x60	//load x0 with address of LIP_GUID var saved on the stack
+	ldr x0, [sp, #0x40]
+	//add x0, sp, #0x60	//load x0 with address of LIP_GUID var saved on the stack
 						// address of LIP GUID into x0 
 						// at this point, sp == sp-0xa0 
 						// LIP_GUID is at [sp - 0x40] on the stack
 						// thus, to point to the correct var on the stack, we use sp with an offset of 0x60
 						// so the variable read from the stack is (sp+ 0x60== (sp - 0xa0) + 0x60) == (sp -0x40) into x0
 						// repeat this process for loading the correct var from the stack into x1
-	add x1, sp, #0x70	// load x1 with address of loadedImageProtocol var saved on stack
+//	add x1, sp, #0x70	// load x1 with address of loadedImageProtocol var saved on stack
 						// loadedImageProtocol is at [sp - 0x30] on the stack
 						// thus, to point to the correct var on the stack, we use sp with an offset of 0x70
 						// so the variable read from the stack is (sp+ 0x70== (sp - 0xa0) + 0x70) == (sp -0x30) into x1
 	
-
+	ldr x1, [sp, #0x30]
 	mov w5, #0x1		//Move EFI_OPEN_PROTOCOL_BY_HANDLE_PROTOCOL(0x1) into register w5;
 	mov w4, #0x0 		//Move 0x0 into register w4
-	ldr x3, [sp, #-0x88] //load ImageHandle from stack into x3 
+	ldr x3, [sp, #0x88] //load ImageHandle from stack into x3 
 	mov x2, x1			//Move contents of x1 (LIP guid) into register x2
 	mov x1, x0			//
-	ldr x1, [sp, #-0x88] //load ImageHandle from stack into x3 
+	ldr x1, [sp, #0x88] //load ImageHandle from stack into x3 
 	blr x6
-	str x0, [sp, #-0x8]
-	str x0, [sp, #-0x8]
+	str x0, [sp, #0x8]
+	ldr x0, [sp, #0x8]
 	cmp x0, 0x0			//check if EFI_STATUS==EFI_SUCCESS (0x0)
-	b.e Print
-	b Exit
+	b.ne Print
+	b exit
 
 exit:
 	//function epilogue
 	
 
 	mov x0, #0x0 //return 0
+	//add sp, sp, #0xa0
 	ldp x29, x30, [sp], #0xa0 //restore x29 and x30
 	ret	
 
 Print:
-	ldr x0, [sp, #-0x10] //load x0 = gBS
-	ldr x0, [x0, #0x140] // gBS->LocateProtocol
-	str x0, [sp, #0x10] //store locateProtocol var on stack
-	ldr x1, [sp, #0x20] //load x0 = SystemTable (from stack at sp - #0x20)
+	//ldr x0, [sp, #0x10] //load x0 = gBS
+	//ldr x0, [x0, #0x140] // gBS->LocateProtocol
+	//str x0, [sp, #0x10] //store locateProtocol var on stack
+	ldr x1, [sp, #0x90] //load x0 = SystemTable (from stack at sp - #0x20)
 	ldr x0, [x1, #0x40] //load x0 = ConOut (SystemTable + 0x40)
 	ldr x3, [x0, #0x8] //load x3 =  OutputString = SystemTable->ConOut->OutputString== x0 + 0x8 == ConOut + 0x8 == OutputString
-	ldr x0, [sp, #0x20] //load x0 = SystemTable (from stack at sp - #0x20)
+	ldr x0, [sp, #0x90] //load x0 = SystemTable (from stack at sp - #0x20)
 	ldr x2, [x0, #0x40] //load x2 = ConOut == x0 + 0x40 = SystemTable + 0x40
-	//adrp x1, hellostr
-	//add x1, x1, #0x10 //a hacky workaround bc the offset to the string is 0x10 from the start of the hellostr address in the .data section
+	adrp x1, hellostr
+	add x1, x1, #0x8 //a hacky workaround bc the offset to the string is 0x10 from the start of the hellostr address in the .data section
 	//add x1, x1, hellochars
 	//add x1, x1, =hellostr
 	//ldr x1, =hellostr
-	mov x1, #0x0048
-	movk x1, #0x0065, lsl #16
-	movk x1, #0x006c, lsl #32
-	movk x1, #0x006c, lsl #48
-	str x1, [sp, #0x58]
-	add x1, sp, #0x58
+	//mov x1, #0x0048
+	//movk x1, #0x0065, lsl #16
+	//movk x1, #0x006c, lsl #32
+	//movk x1, #0x006c, lsl #48
+	//str x1, [sp, #0x58]
+	//add x1, sp, #0x58
 	mov x0, x2 //mov x0 = SystemTable->ConOut == x2
 	blr x3	//call SystemTable->ConOut->OutputString(SystemTable->ConOut, L"hello from the other side\n");
-	b Exit
+	//ret
+	b exit
+	//b Exit
 
 .data
 .balign 8
 hellostr:
 	.string16 "Hello from the other side"
+
+originalfile:
 	.string16 "\\UEFISelfRep.efi\0"
+
+targetfile:
 	.string16 "\\4.efi\0"
 	//.word 0x00480065
 	//.word 0x48, 0x00, 0x65, 0x00, 0x6C, 0x00, 0x6C, 0x00, 0x6F, 0x00, 0x20, 0x00, 0x66, 0x00, 0x72, 0x00, 0x6F, 0x00, 0x6D, 0x00, 0x20, 0x00, 0x74, 0x00, 0x68, 0x00, 0x65, 0x00, 0x20, 0x00, 0x6F, 0x00, 0x74, 0x00, 0x68, 0x00, 0x65, 0x00, 0x72, 0x00, 0x20, 0x00, 0x73, 0x00, 0x69, 0x00, 0x64, 0x00, 0x65, 0x00
