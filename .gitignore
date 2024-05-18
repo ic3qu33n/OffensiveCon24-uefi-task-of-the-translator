@@ -4,3 +4,6 @@
 
 ##ignore archive dir
 uefi-task-translator-archive/
+
+##ignore archive dir
+x64-uefi-exploits/bggp4/self-rep-golf-archive/
