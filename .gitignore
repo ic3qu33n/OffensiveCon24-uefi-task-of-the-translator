@@ -1,0 +1,6 @@
+
+##ignore .DS_STORE
+.DS_STORE
+
+##ignore archive dir
+uefi-task-translator-archive/
