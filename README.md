@@ -2,8 +2,9 @@
 # UEFI and the Task of the Translator: Using cross-architecture UEFI quines as a framework for UEFI exploit development           
           
 This repo contains the slidedeck and PoCs presented at OffensiveCon 2024 for my talk "UEFI and the Task of the Translator: Using cross-architecture UEFI quines as a framework for UEFI exploit development"             
-          
-OffensiveCon24 talk slidededeck is in the [OffensiveCon2024-slides](OffensiveCon2024-slides/) folder.            
+
+## [OffensiveCon24 slidedeck]          
+### OffensiveCon24 talk slidededeck is in the [OffensiveCon2024-slides](OffensiveCon2024-slides/) folder.            
           
 PoCs are organized as follows:            
 ## PoCs          
