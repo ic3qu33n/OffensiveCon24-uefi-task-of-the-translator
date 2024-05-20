@@ -8,8 +8,12 @@ uefi-task-translator-archive/
 ##ignore archive dir
 x64-uefi-exploits/bggp4/self-rep-golf-archive/
 
+
+##ignore arm64-debugging directory until edits are done
+arm64-uefi-exploits/arm64-UEFI-debugging/
+
 ##ignore logging files
-arm64-uefi-exploits/hardcopy.0
-arm64-uefi-exploits/screenlog.0
-arm64-uefi-exploits/arm64_debug_log_*.txt
+arm64-uefi-exploits/arm64-UEFI-debugging/hardcopy.0
+arm64-uefi-exploits/arm64-UEFI-debugging/screenlog.0
+arm64-uefi-exploits/arm64-UEFI-debuggin/arm64_debug_log_*.txt
 screenlog.0
