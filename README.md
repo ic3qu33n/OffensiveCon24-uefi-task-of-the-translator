@@ -17,6 +17,12 @@ bggp4 winning entry - UEFI self-replicating app, compiled from x64 asm source
 source code for basic UEFI app, written in x64, to be used as a template for writing x64 UEFI shellcode    
       
 ## [arm64 assembly](arm64-uefi-exploits/)          
+
+
+
+https://github.com/ic3qu33n/OffensiveCon24-uefi-task-of-the-translator/assets/121086940/5aae6256-dbf4-4ee4-a254-53b3c8bb7311
+
+
       
 ### [quinearm64.S](arm64-uefi-exploits/arm64-uefi-quine/quinearm64.S):     
 arm64 assembly source code for self-replicating UEFI application           
