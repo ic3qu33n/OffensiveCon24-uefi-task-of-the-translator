@@ -35,6 +35,11 @@ The UEFI apps for both the final arm64 assembly solution and the original cross-
       
 #### [poc_arm64.py](arm64-uefi-exploits/poc_arm64.py):   
 Python script to test arm64 self-rep app in QEMU; includes option for running in QEMU with GDB debugging session      
+
+
+### SMM PoCs
+SMM Callout PoCs will be published on the Leviathan GitHub as part of my upcoming UEFI blog series for Leviathan Security Group.
+Links to the blog series and the SMM PoCs will be added here as they are published on the Leviathan website and GitHub, in the coming weeks.
             
 ---
 
